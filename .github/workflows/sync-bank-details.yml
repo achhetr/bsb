@@ -5,6 +5,7 @@ on:
   #   - cron: "* * * * *"
   push:
     branches: [ master ]
+    
 
 jobs:
   build:
