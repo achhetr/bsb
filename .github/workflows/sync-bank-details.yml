@@ -5,7 +5,6 @@ on:
   #   - cron: "* * * * *"
   push:
     branches: [ master ]
-    
 
 jobs:
   build:
@@ -21,6 +20,9 @@ jobs:
         run: |
           bundle install
           bundle exec rake bsb:sync
+      - name: GITHUB TOKEN
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }}
       - name: Extract git commit data
         uses: rlespinasse/git-commit-data-action@v1
       - name: Update Author info
@@ -31,18 +33,18 @@ jobs:
         with:
           branch: "update/auto-bank-list"
           base: master
-          title: "Github Action updated $(date)"
+          title: Github Action updated $(date)
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.AUTO_SYNC_BANK_BOT }}
           delete-branch: true
       - name: Approve Pull Request
         uses: juliangruber/approve-pull-request-action@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           number: ${{steps.demo-1.outputs.pull-request-number }}
-      - name: Approve Pull Request
+      - name: Merge Pull Request
         uses: juliangruber/merge-pull-request-action@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
